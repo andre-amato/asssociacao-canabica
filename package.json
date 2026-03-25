@@ -1,5 +1,6 @@
 {
   "name": "fazenda-canabica",
+  "packageManager": "npm@10.8.2",
   "private": true,
   "workspaces": ["apps/*"],
   "scripts": {

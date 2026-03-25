@@ -1,13 +1,12 @@
 import Link from "next/link";
+import Logo from "./Logo";
 
 export default function Footer() {
   return (
     <footer className="bg-teal text-white/80">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 className="text-lg font-bold text-white mb-3">
-            🌿 Fazenda Canábica
-          </h3>
+          <Logo size={48} textColor="text-white" className="mb-3" />
           <p className="text-sm leading-relaxed">
             Acesso seguro, responsável e humanizado à cannabis medicinal.
           </p>

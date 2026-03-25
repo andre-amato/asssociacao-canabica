@@ -1,13 +1,16 @@
 # 🌿 Associação Fazenda Canábica
 
-Site institucional e plataforma de associação da Fazenda Canábica — acesso seguro, responsável e humanizado à cannabis medicinal.
+Site institucional e plataforma de associação da **Fazenda Canábica** — acesso seguro, responsável e humanizado à cannabis medicinal.
 
 ## Stack
 
-- **Monorepo**: Turborepo + npm workspaces
-- **Frontend**: Next.js 15, React 19, Tailwind CSS 4
-- **Backend**: NestJS 11, JWT Auth
-- **Linguagem**: TypeScript
+| Camada | Tecnologia |
+|--------|-----------|
+| Monorepo | Turborepo + npm workspaces |
+| Frontend | Next.js 15, React 19, Tailwind CSS 4 |
+| Backend | NestJS 11, JWT Auth |
+| Linguagem | TypeScript |
+| Deploy | Vercel (front) + Railway (API) |
 
 ## Estrutura
 
@@ -20,9 +23,9 @@ apps/
 ## Funcionalidades
 
 ### Site Público
-- Página inicial com apresentação da associação
+- Página inicial com logo e identidade visual
 - Sobre nós (missão, visão, valores)
-- Como funciona (passo a passo)
+- Como funciona (passo a passo para associação)
 - Cannabis medicinal (informações e condições tratáveis)
 - Serviços ao associado
 - Blog / Notícias
@@ -30,31 +33,75 @@ apps/
 
 ### Pré-cadastro
 - Formulário simplificado: nome, e-mail, telefone, endereço
-- Confirmação visual após envio
+- Tela de confirmação após envio
+- Fluxo guiado para o associado
 
 ### Área Exclusiva do Associado
 - Login com autenticação JWT
-- Dashboard com status geral
+- Dashboard com status geral (perfil, documentos, assinatura)
 - Upload de documentos (RG, CPF, comprovante, laudo médico, receita)
-- Assinatura digital do termo de adesão (preparado para integração com DocuSign, Clicksign, D4Sign ou Gov.br)
+- Assinatura digital do termo de adesão
+- Preparado para integração com DocuSign, Clicksign, D4Sign ou Gov.br
 
 ### API (Backend)
-- `POST /api/associados/pre-cadastro` — pré-cadastro
-- `POST /api/auth/login` — autenticação
-- `POST /api/contato` — formulário de contato
-- `POST /api/documentos/upload` — upload de documentos
-- `POST /api/assinatura/iniciar` — iniciar assinatura digital
-- `POST /api/assinatura/webhook` — callback do provedor de assinatura
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/api/associados/pre-cadastro` | Pré-cadastro de novo associado |
+| POST | `/api/auth/login` | Autenticação (JWT) |
+| POST | `/api/contato` | Formulário de contato |
+| POST | `/api/documentos/upload` | Upload de documentos |
+| POST | `/api/assinatura/iniciar` | Iniciar assinatura digital |
+| POST | `/api/assinatura/webhook` | Callback do provedor de assinatura |
 
 ## Rodando localmente
 
 ```bash
+# Instalar dependências
 npm install
+
+# Rodar em desenvolvimento (front + back)
 npm run dev
 ```
 
-Frontend: http://localhost:3000
-Backend: http://localhost:3001
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
+
+## Configuração
+
+Copie os arquivos `.env.example` para `.env` (ou `.env.local`):
+
+```bash
+cp apps/web/.env.example apps/web/.env.local
+cp apps/api/.env.example apps/api/.env
+```
+
+### Variáveis do Frontend (`apps/web/.env.local`)
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+### Variáveis do Backend (`apps/api/.env`)
+
+```env
+JWT_SECRET=your-secret-key-here
+CORS_ORIGIN=*
+PORT=3001
+NODE_ENV=development
+```
+
+## Deploy
+
+### Frontend (Vercel)
+- Root Directory: `apps/web`
+- Framework: Next.js
+- Variável: `NEXT_PUBLIC_API_URL` = URL do Railway
+
+### Backend (Railway)
+- Root Directory: `apps/api`
+- Build: `npm install && npm run build`
+- Start: `node dist/main.js`
+- Variáveis: `JWT_SECRET`, `CORS_ORIGIN`, `PORT`, `NODE_ENV`
 
 ## Login de teste
 
@@ -63,24 +110,14 @@ Email: admin@fazendacanabica.org.br
 Senha: 123456
 ```
 
-## Variáveis de ambiente
-
-```env
-# Frontend (apps/web/.env.local)
-NEXT_PUBLIC_API_URL=http://localhost:3001
-
-# Backend (apps/api/.env)
-JWT_SECRET=sua-chave-secreta
-```
-
 ## Próximos passos
 
 - [ ] Banco de dados (Prisma + PostgreSQL)
 - [ ] Integração real com provedor de assinatura digital
-- [ ] Envio de e-mails (SendGrid / SES)
+- [ ] Envio de e-mails transacionais (SendGrid / SES)
 - [ ] Upload de arquivos para S3
 - [ ] Painel administrativo
-- [ ] Deploy (Vercel + Railway / AWS)
+- [ ] Domínio customizado
 
 ## Licença
 

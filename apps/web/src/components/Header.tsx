@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import Logo from "./Logo";
 
 const links = [
   { href: "/", label: "Início" },
@@ -21,9 +22,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-verde/10">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-verde-escuro tracking-tight">
-            🌿 Fazenda Canábica
-          </span>
+          <Logo size={38} />
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">

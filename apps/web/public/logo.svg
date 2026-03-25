@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none">
+  <!-- Folha verde (topo) -->
+  <path d="M100 10 L130 60 L100 50 L70 60 Z" fill="#2ECC71"/>
+  <path d="M70 60 L50 90 L75 80 L100 50 Z" fill="#1A7A4C"/>
+  <path d="M130 60 L150 90 L125 80 L100 50 Z" fill="#1A7A4C"/>
+  <path d="M50 90 L40 110 L70 95 L75 80 Z" fill="#2ECC71"/>
+  <path d="M150 90 L160 110 L130 95 L125 80 Z" fill="#2ECC71"/>
+  <!-- Sol dourado -->
+  <circle cx="100" cy="110" r="35" fill="#E8A838"/>
+  <path d="M65 110 A35 35 0 0 1 135 110 L65 110 Z" fill="#E8A838"/>
+  <!-- Raios do sol -->
+  <path d="M65 110 L50 95 L75 100 Z" fill="#FAF3E0" opacity="0.4"/>
+  <path d="M80 85 L70 65 L90 80 Z" fill="#FAF3E0" opacity="0.4"/>
+  <path d="M100 80 L100 55 L105 80 Z" fill="#FAF3E0" opacity="0.3"/>
+  <path d="M120 85 L130 65 L110 80 Z" fill="#FAF3E0" opacity="0.4"/>
+  <path d="M135 110 L150 95 L125 100 Z" fill="#FAF3E0" opacity="0.4"/>
+  <!-- Ondas teal (base) -->
+  <path d="M35 130 Q65 115 100 130 Q135 145 165 130 L165 150 Q135 165 100 150 Q65 135 35 150 Z" fill="#1B4D5C"/>
+  <path d="M30 155 Q65 140 100 155 Q135 170 170 155 L170 175 Q135 190 100 175 Q65 160 30 175 Z" fill="#1B4D5C"/>
+  <path d="M35 180 Q65 165 100 180 Q135 195 165 180 L165 200 Q135 215 100 200 Q65 185 35 200 Z" fill="#1A7A4C" opacity="0.6"/>
+</svg>

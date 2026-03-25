@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Logo from "@/components/Logo";
 import {
   Heart,
   Shield,
@@ -25,9 +26,7 @@ export default function Home() {
           </div>
           <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-36">
             <div className="max-w-2xl">
-              <span className="inline-block px-3 py-1 bg-white/10 rounded-full text-sm mb-6">
-                🌿 Associação Fazenda Canábica
-              </span>
+              <Logo size={64} textColor="text-white" className="mb-6" />
               <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
                 Acesso seguro e humanizado à{" "}
                 <span className="text-dourado">cannabis medicinal</span>

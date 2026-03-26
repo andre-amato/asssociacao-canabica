@@ -4,16 +4,16 @@ import { PrismaService } from "../prisma.service";
 import * as bcrypt from "bcryptjs";
 
 class PreCadastroDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Nome é obrigatório" })
   nome: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: "E-mail inválido" })
   email: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Telefone é obrigatório" })
   telefone: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Endereço é obrigatório" })
   endereco: string;
 }
 

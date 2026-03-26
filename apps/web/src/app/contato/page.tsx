@@ -7,14 +7,10 @@ import { useState } from "react";
 
 export default function Contato() {
   const [form, setForm] = useState({ nome: "", email: "", mensagem: "" });
-  const [erro, setErro] = useState("");
-  const [sucesso, setSucesso] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErro("");
-    setSucesso(false);
     setEnviando(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/contato`, {
@@ -23,15 +19,15 @@ export default function Contato() {
         body: JSON.stringify(form),
       });
       if (res.ok) {
-        setSucesso(true);
+        alert("Mensagem enviada com sucesso!");
         setForm({ nome: "", email: "", mensagem: "" });
       } else {
         const data = await res.json().catch(() => null);
-        const msgs = Array.isArray(data?.message) ? data.message.join(", ") : data?.message;
-        setErro(msgs || "Erro ao enviar mensagem. Tente novamente.");
+        const msgs = Array.isArray(data?.message) ? data.message.join("\n") : data?.message;
+        alert(msgs || "Erro ao enviar mensagem. Tente novamente.");
       }
     } catch {
-      setErro("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
+      alert("Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.");
     } finally {
       setEnviando(false);
     }
@@ -88,12 +84,6 @@ export default function Contato() {
                 >
                   {enviando ? "Enviando..." : "Enviar mensagem"}
                 </button>
-                {erro && (
-                  <p className="text-sm text-red-500 text-center bg-red-50 p-3 rounded-xl">{erro}</p>
-                )}
-                {sucesso && (
-                  <p className="text-sm text-verde text-center bg-verde/5 p-3 rounded-xl">Mensagem enviada com sucesso!</p>
-                )}
               </form>
             </div>
 

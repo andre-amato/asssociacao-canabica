@@ -13,12 +13,10 @@ export default function AssocieSe() {
     endereco: "",
   });
   const [enviado, setEnviado] = useState(false);
-  const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErro("");
     setEnviando(true);
     try {
       const res = await fetch(
@@ -33,11 +31,11 @@ export default function AssocieSe() {
         setEnviado(true);
       } else {
         const data = await res.json().catch(() => null);
-        const msgs = Array.isArray(data?.message) ? data.message.join(", ") : data?.message;
-        setErro(msgs || "Erro ao enviar. Tente novamente.");
+        const msgs = Array.isArray(data?.message) ? data.message.join("\n") : data?.message;
+        alert(msgs || "Erro ao enviar. Tente novamente.");
       }
     } catch {
-      setErro("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
+      alert("Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.");
     } finally {
       setEnviando(false);
     }
@@ -169,9 +167,6 @@ export default function AssocieSe() {
               >
                 {enviando ? "Enviando..." : "Enviar pré-cadastro"}
               </button>
-              {erro && (
-                <p className="text-sm text-red-500 text-center bg-red-50 p-3 rounded-xl">{erro}</p>
-              )}
             </form>
             <p className="text-xs text-teal/40 mt-4 text-center">
               Seus dados são protegidos conforme a LGPD e utilizados apenas para

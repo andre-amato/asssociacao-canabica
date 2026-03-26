@@ -3,13 +3,13 @@ import { IsEmail, IsNotEmpty } from "class-validator";
 import { PrismaService } from "../prisma.service";
 
 class ContatoDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Nome é obrigatório" })
   nome: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: "E-mail inválido" })
   email: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Mensagem é obrigatória" })
   mensagem: string;
 }
 

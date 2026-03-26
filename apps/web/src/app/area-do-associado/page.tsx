@@ -7,12 +7,10 @@ import { LogIn } from "lucide-react";
 
 export default function AreaDoAssociado() {
   const [form, setForm] = useState({ email: "", senha: "" });
-  const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErro("");
     setEnviando(true);
     try {
       const res = await fetch(
@@ -29,10 +27,10 @@ export default function AreaDoAssociado() {
         window.location.href = "/area-do-associado/dashboard";
       } else {
         const data = await res.json().catch(() => null);
-        setErro(data?.message || "Credenciais inválidas.");
+        alert(data?.message || "Credenciais inválidas.");
       }
     } catch {
-      setErro("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
+      alert("Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.");
     } finally {
       setEnviando(false);
     }
@@ -84,9 +82,6 @@ export default function AreaDoAssociado() {
                 >
                   {enviando ? "Entrando..." : "Entrar"}
                 </button>
-                {erro && (
-                  <p className="text-sm text-red-500 text-center bg-red-50 p-3 rounded-xl">{erro}</p>
-                )}
               </form>
               <p className="text-xs text-teal/40 mt-4 text-center">
                 Ainda não tem conta?{" "}

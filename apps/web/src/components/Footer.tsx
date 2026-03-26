@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-teal text-white/80">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <Logo size={48} textColor="text-white" className="mb-3" />
+          <Logo size={56} className="mb-3" />
           <p className="text-sm leading-relaxed">
             Acesso seguro, responsável e humanizado à cannabis medicinal.
           </p>

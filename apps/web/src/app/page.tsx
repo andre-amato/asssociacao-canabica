@@ -26,7 +26,7 @@ export default function Home() {
           </div>
           <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-36">
             <div className="max-w-2xl">
-              <Logo size={64} textColor="text-white" className="mb-6" />
+              <Logo size={80} className="mb-6" />
               <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
                 Acesso seguro e humanizado à{" "}
                 <span className="text-dourado">cannabis medicinal</span>

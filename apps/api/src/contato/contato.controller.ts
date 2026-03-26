@@ -6,7 +6,8 @@ class ContatoDto {
   @IsNotEmpty({ message: "Nome é obrigatório" })
   nome: string;
 
-  @IsEmail({}, { message: "E-mail inválido" })
+  @IsNotEmpty({ message: "E-mail é obrigatório" })
+  @IsEmail({}, { message: "Por favor, informe um e-mail válido (ex: seu@email.com)" })
   email: string;
 
   @IsNotEmpty({ message: "Mensagem é obrigatória" })

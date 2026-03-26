@@ -3,7 +3,8 @@ import { IsEmail, IsNotEmpty } from "class-validator";
 import { AuthService } from "./auth.service";
 
 class LoginDto {
-  @IsEmail({}, { message: "E-mail inválido" })
+  @IsNotEmpty({ message: "E-mail é obrigatório" })
+  @IsEmail({}, { message: "Por favor, informe um e-mail válido (ex: seu@email.com)" })
   email: string;
 
   @IsNotEmpty({ message: "Senha é obrigatória" })

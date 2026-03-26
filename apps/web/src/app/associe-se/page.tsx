@@ -6,6 +6,23 @@ import { useState } from "react";
 import { CheckCircle } from "lucide-react";
 
 export default function AssocieSe() {
+  const traduzirErro = (msg: string) => {
+    const traducoes: Record<string, string> = {
+      "email must be an email": "Por favor, informe um e-mail válido (ex: seu@email.com).",
+      "nome should not be empty": "O campo nome é obrigatório.",
+      "email should not be empty": "O campo e-mail é obrigatório.",
+      "telefone should not be empty": "O campo telefone é obrigatório.",
+      "endereco should not be empty": "O campo endereço é obrigatório.",
+    };
+    for (const [en, pt] of Object.entries(traducoes)) {
+      msg = msg.replace(en, pt);
+    }
+    if (msg.includes("Unique constraint") || msg.includes("already exists")) {
+      return "Este e-mail já está cadastrado. Tente fazer login ou use outro e-mail.";
+    }
+    return msg;
+  };
+
   const [form, setForm] = useState({
     nome: "",
     email: "",
@@ -17,6 +34,26 @@ export default function AssocieSe() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (form.nome.trim().length < 3) {
+      alert("Por favor, informe seu nome completo (mínimo 3 caracteres).");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      alert("Por favor, informe um e-mail válido (ex: seu@email.com).");
+      return;
+    }
+    const telLimpo = form.telefone.replace(/\D/g, "");
+    if (telLimpo.length < 10 || telLimpo.length > 11) {
+      alert("Por favor, informe um telefone válido com DDD (ex: 11999999999).");
+      return;
+    }
+    if (form.endereco.trim().length < 10) {
+      alert("Por favor, informe seu endereço completo (rua, número, bairro, cidade e estado).");
+      return;
+    }
+
     setEnviando(true);
     try {
       const res = await fetch(
@@ -32,7 +69,7 @@ export default function AssocieSe() {
       } else {
         const data = await res.json().catch(() => null);
         const msgs = Array.isArray(data?.message) ? data.message.join("\n") : data?.message;
-        alert(msgs || "Erro ao enviar. Tente novamente.");
+        alert(traduzirErro(msgs || "Erro ao enviar. Tente novamente."));
       }
     } catch {
       alert("Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.");

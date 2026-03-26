@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { IsEmail, IsNotEmpty } from "class-validator";
 import { PrismaService } from "../prisma.service";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 
 class PreCadastroDto {
   @IsNotEmpty()

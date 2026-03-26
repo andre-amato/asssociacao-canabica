@@ -1,7 +1,7 @@
 FROM node:22-alpine AS build
 WORKDIR /app
-COPY apps/api/package.json apps/api/package-lock.json ./
-RUN npm ci
+COPY apps/api/package.json ./
+RUN npm install
 COPY apps/api/ .
 RUN npx prisma generate && npm run build
 

@@ -7,19 +7,33 @@ import { useState } from "react";
 
 export default function Contato() {
   const [form, setForm] = useState({ nome: "", email: "", mensagem: "" });
+  const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErro("");
+    setSucesso(false);
+    setEnviando(true);
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/contato`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/contato`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      alert("Mensagem enviada com sucesso!");
-      setForm({ nome: "", email: "", mensagem: "" });
+      if (res.ok) {
+        setSucesso(true);
+        setForm({ nome: "", email: "", mensagem: "" });
+      } else {
+        const data = await res.json().catch(() => null);
+        const msgs = Array.isArray(data?.message) ? data.message.join(", ") : data?.message;
+        setErro(msgs || "Erro ao enviar mensagem. Tente novamente.");
+      }
     } catch {
-      alert("Erro ao enviar mensagem. Tente novamente.");
+      setErro("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -69,10 +83,17 @@ export default function Contato() {
                 />
                 <button
                   type="submit"
-                  className="w-full py-3 bg-verde text-white rounded-xl font-medium hover:bg-verde-escuro transition-colors"
+                  disabled={enviando}
+                  className="w-full py-3 bg-verde text-white rounded-xl font-medium hover:bg-verde-escuro transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Enviar mensagem
+                  {enviando ? "Enviando..." : "Enviar mensagem"}
                 </button>
+                {erro && (
+                  <p className="text-sm text-red-500 text-center bg-red-50 p-3 rounded-xl">{erro}</p>
+                )}
+                {sucesso && (
+                  <p className="text-sm text-verde text-center bg-verde/5 p-3 rounded-xl">Mensagem enviada com sucesso!</p>
+                )}
               </form>
             </div>
 

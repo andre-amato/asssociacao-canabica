@@ -13,9 +13,13 @@ export default function AssocieSe() {
     endereco: "",
   });
   const [enviado, setEnviado] = useState(false);
+  const [erro, setErro] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErro("");
+    setEnviando(true);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/associados/pre-cadastro`,
@@ -28,10 +32,14 @@ export default function AssocieSe() {
       if (res.ok) {
         setEnviado(true);
       } else {
-        alert("Erro ao enviar. Tente novamente.");
+        const data = await res.json().catch(() => null);
+        const msgs = Array.isArray(data?.message) ? data.message.join(", ") : data?.message;
+        setErro(msgs || "Erro ao enviar. Tente novamente.");
       }
     } catch {
-      alert("Erro ao enviar. Tente novamente.");
+      setErro("Não foi possível conectar ao servidor. Tente novamente mais tarde.");
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -156,10 +164,14 @@ export default function AssocieSe() {
               </div>
               <button
                 type="submit"
-                className="w-full py-3 bg-verde text-white rounded-xl font-medium hover:bg-verde-escuro transition-colors"
+                disabled={enviando}
+                className="w-full py-3 bg-verde text-white rounded-xl font-medium hover:bg-verde-escuro transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Enviar pré-cadastro
+                {enviando ? "Enviando..." : "Enviar pré-cadastro"}
               </button>
+              {erro && (
+                <p className="text-sm text-red-500 text-center bg-red-50 p-3 rounded-xl">{erro}</p>
+              )}
             </form>
             <p className="text-xs text-teal/40 mt-4 text-center">
               Seus dados são protegidos conforme a LGPD e utilizados apenas para

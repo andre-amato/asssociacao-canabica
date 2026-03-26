@@ -1,5 +1,6 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { IsEmail, IsNotEmpty } from "class-validator";
+import { PrismaService } from "../prisma.service";
 
 class ContatoDto {
   @IsNotEmpty()
@@ -14,10 +15,17 @@ class ContatoDto {
 
 @Controller("contato")
 export class ContatoController {
+  constructor(private prisma: PrismaService) {}
+
   @Post()
-  create(@Body() dto: ContatoDto) {
-    // TODO: salvar no banco / enviar email
-    console.log("Nova mensagem de contato:", dto);
+  async create(@Body() dto: ContatoDto) {
+    await this.prisma.contato.create({
+      data: {
+        nome: dto.nome,
+        email: dto.email,
+        mensagem: dto.mensagem,
+      },
+    });
     return { message: "Mensagem recebida com sucesso" };
   }
 }

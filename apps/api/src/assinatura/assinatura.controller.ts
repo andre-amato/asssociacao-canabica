@@ -1,29 +1,47 @@
-import { Controller, Post, Headers } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Headers,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { PrismaService } from "../prisma.service";
 
 @Controller("assinatura")
 export class AssinaturaController {
-  @Post("iniciar")
-  iniciar(@Headers("authorization") auth: string) {
-    // TODO: integrar com DocuSign / Clicksign / D4Sign / Gov.br
-    // 1. Gerar documento PDF do termo de adesão
-    // 2. Enviar para API de assinatura digital
-    // 3. Retornar URL de assinatura para o usuário
-    console.log("Iniciando processo de assinatura digital");
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+  ) {}
 
-    // Placeholder - em produção retornaria a URL real do provedor
+  @Post("iniciar")
+  async iniciar(@Headers("authorization") auth: string) {
+    const token = auth?.replace("Bearer ", "");
+    if (!token) throw new UnauthorizedException();
+
+    const payload = await this.jwt.verifyAsync(token);
+
+    const assinatura = await this.prisma.assinatura.create({
+      data: {
+        associadoId: payload.sub,
+        provider: "placeholder",
+        status: "ENVIADA",
+      },
+    });
+
+    // TODO: integrar com provedor de assinatura digital
     return {
       message: "Processo de assinatura iniciado",
-      provider: "placeholder",
-      url: null, // Ex: "https://app.clicksign.com/sign/xxx"
-      status: "enviada",
+      id: assinatura.id,
+      provider: assinatura.provider,
+      url: null,
+      status: assinatura.status,
     };
   }
 
   @Post("webhook")
-  webhook() {
+  async webhook() {
     // TODO: receber callback do provedor de assinatura
-    // Atualizar status do associado no banco
-    console.log("Webhook de assinatura recebido");
     return { received: true };
   }
 }

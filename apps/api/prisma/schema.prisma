@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StatusAssociado {
+  PENDENTE
+  ATIVO
+  INATIVO
+}
+
+enum TipoDocumento {
+  RG
+  CPF
+  COMPROVANTE_RESIDENCIA
+  LAUDO_MEDICO
+  RECEITA_MEDICA
+  TERMO_ADESAO
+  OUTRO
+}
+
+enum StatusAssinatura {
+  PENDENTE
+  ENVIADA
+  ASSINADA
+  CANCELADA
+}
+
+model Associado {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  telefone  String
+  endereco  String
+  status    StatusAssociado @default(PENDENTE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  documentos  Documento[]
+  assinaturas Assinatura[]
+
+  @@map("associados")
+}
+
+model Contato {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String
+  mensagem  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contatos")
+}
+
+model Documento {
+  id           String        @id @default(cuid())
+  tipo         TipoDocumento
+  filename     String
+  url          String?
+  associadoId  String        @map("associado_id")
+  associado    Associado     @relation(fields: [associadoId], references: [id])
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  @@map("documentos")
+}
+
+model Assinatura {
+  id           String           @id @default(cuid())
+  provider     String?
+  externalUrl  String?          @map("external_url")
+  status       StatusAssinatura @default(PENDENTE)
+  associadoId  String           @map("associado_id")
+  associado    Associado        @relation(fields: [associadoId], references: [id])
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  @@map("assinaturas")
+}

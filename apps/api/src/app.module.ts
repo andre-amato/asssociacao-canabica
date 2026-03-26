@@ -6,6 +6,7 @@ import { DocumentosController } from "./documentos/documentos.controller";
 import { AssinaturaController } from "./assinatura/assinatura.controller";
 import { AuthController } from "./auth/auth.controller";
 import { AuthService } from "./auth/auth.service";
+import { PrismaService } from "./prisma.service";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthService } from "./auth/auth.service";
     AssinaturaController,
     AuthController,
   ],
-  providers: [AuthService],
+  providers: [AuthService, PrismaService],
+  exports: [PrismaService],
 })
 export class AppModule {}

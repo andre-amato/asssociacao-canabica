@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Logo from "@/components/Logo";
 import { Target, Eye, Heart } from "lucide-react";
 
 export default function Sobre() {
@@ -11,15 +12,20 @@ export default function Sobre() {
           <div className="max-w-7xl mx-auto px-4">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Sobre Nós</h1>
             <p className="text-white/70 text-lg max-w-2xl">
-              Conheça a história, missão e valores da Associação Fazenda
-              Canábica.
+              Conheça a história, missão e valores da CANABICA - Associação de Pacientes.
             </p>
           </div>
         </section>
 
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4">
-            <h2 className="text-2xl font-bold text-teal mb-4">Nossa História</h2>
+            <div className="flex items-center gap-4 mb-6">
+              <Logo size={64} />
+              <div>
+                <h2 className="text-2xl font-bold text-teal">Nossa História</h2>
+                <p className="text-sm text-gray-500">CANABICA - Associação de Pacientes</p>
+              </div>
+            </div>
             <p className="text-teal/70 leading-relaxed mb-8">
               A Associação Fazenda Canábica nasceu da necessidade de oferecer
               acesso seguro e humanizado à cannabis medicinal. Fundada por

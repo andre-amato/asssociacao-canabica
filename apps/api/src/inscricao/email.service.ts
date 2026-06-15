@@ -1,23 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import * as nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 @Injectable()
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private resend: Resend;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || "smtp.gmail.com",
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: process.env.SMTP_SECURE === "true",
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-      connectionTimeout: 10000, // 10s para conectar
-      greetingTimeout: 10000,   // 10s para greeting
-      socketTimeout: 15000,     // 15s para socket
-    });
+    this.resend = new Resend(process.env.RESEND_API_KEY);
   }
 
   async enviarDocumentosAssinados(params: {
@@ -27,49 +16,49 @@ export class EmailService {
     fichaPdf: Buffer;
   }) {
     const emailAssociacao = process.env.EMAIL_ASSOCIACAO;
-    const remetente = process.env.SMTP_FROM || process.env.SMTP_USER;
+    const remetente = process.env.EMAIL_FROM || "CANABICA <onboarding@resend.dev>";
 
-    const mailOptions: nodemailer.SendMailOptions = {
-      from: `"CANABICA - Associação de Pacientes" <${remetente}>`,
-      subject: `Documentos de Inscrição - ${params.nomeAssociado}`,
-      html: `
-        <h2>Documentos de Inscrição - CANABICA</h2>
-        <p>Olá ${params.nomeAssociado},</p>
-        <p>Seguem em anexo os documentos assinados da sua inscrição na CANABICA - Associação de Pacientes:</p>
-        <ul>
-          <li>Autorização para Ajuizamento de Ação Judicial</li>
-          <li>Ficha de Inscrição</li>
-        </ul>
-        <p>Guarde estes documentos para seus registros.</p>
-        <br>
-        <p>Atenciosamente,<br>CANABICA - Associação de Pacientes</p>
-      `,
-      attachments: [
-        {
-          filename: `Autorizacao_Ajuizamento_${params.nomeAssociado.replace(/\s+/g, "_")}.pdf`,
-          content: params.autorizacaoPdf,
-          contentType: "application/pdf",
-        },
-        {
-          filename: `Ficha_Inscricao_${params.nomeAssociado.replace(/\s+/g, "_")}.pdf`,
-          content: params.fichaPdf,
-          contentType: "application/pdf",
-        },
-      ],
-    };
+    const attachments = [
+      {
+        filename: `Autorizacao_Ajuizamento_${params.nomeAssociado.replace(/\s+/g, "_")}.pdf`,
+        content: params.autorizacaoPdf,
+      },
+      {
+        filename: `Ficha_Inscricao_${params.nomeAssociado.replace(/\s+/g, "_")}.pdf`,
+        content: params.fichaPdf,
+      },
+    ];
+
+    const html = `
+      <h2>Documentos de Inscrição - CANABICA</h2>
+      <p>Olá ${params.nomeAssociado},</p>
+      <p>Seguem em anexo os documentos assinados da sua inscrição na CANABICA - Associação de Pacientes:</p>
+      <ul>
+        <li>Autorização para Ajuizamento de Ação Judicial</li>
+        <li>Ficha de Inscrição</li>
+      </ul>
+      <p>Guarde estes documentos para seus registros.</p>
+      <br>
+      <p>Atenciosamente,<br>CANABICA - Associação de Pacientes</p>
+    `;
 
     // Enviar para o associado
-    await this.transporter.sendMail({
-      ...mailOptions,
+    await this.resend.emails.send({
+      from: remetente,
       to: params.emailAssociado,
+      subject: `Documentos de Inscrição - ${params.nomeAssociado}`,
+      html,
+      attachments,
     });
 
     // Enviar cópia para a associação
     if (emailAssociacao) {
-      await this.transporter.sendMail({
-        ...mailOptions,
+      await this.resend.emails.send({
+        from: remetente,
         to: emailAssociacao,
         subject: `[CÓPIA] Documentos de Inscrição - ${params.nomeAssociado}`,
+        html,
+        attachments,
       });
     }
   }

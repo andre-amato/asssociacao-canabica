@@ -36,7 +36,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="/associe-se"
+            href="/inscricao"
             className="ml-2 px-4 py-2 bg-verde text-white rounded-full text-sm font-medium hover:bg-verde-escuro transition-colors"
           >
             Associe-se
@@ -65,7 +65,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="/associe-se"
+            href="/inscricao"
             className="mt-2 block text-center px-4 py-2 bg-verde text-white rounded-full text-sm font-medium"
             onClick={() => setOpen(false)}
           >

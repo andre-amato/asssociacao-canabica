@@ -38,7 +38,7 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/associe-se"
+                  href="/inscricao"
                   className="px-6 py-3 bg-dourado text-teal font-semibold rounded-full hover:bg-dourado/90 transition-colors inline-flex items-center gap-2"
                 >
                   Associe-se agora <ArrowRight size={18} />
@@ -215,7 +215,7 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                href="/associe-se"
+                href="/inscricao"
                 className="px-8 py-3 bg-dourado text-teal font-semibold rounded-full hover:bg-dourado/90 transition-colors inline-flex items-center gap-2"
               >
                 Quero me associar <ArrowRight size={18} />

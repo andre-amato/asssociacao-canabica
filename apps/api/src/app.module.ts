@@ -5,8 +5,11 @@ import { AssociadosController } from "./associados/associados.controller";
 import { DocumentosController } from "./documentos/documentos.controller";
 import { AssinaturaController } from "./assinatura/assinatura.controller";
 import { AuthController } from "./auth/auth.controller";
+import { InscricaoController } from "./inscricao/inscricao.controller";
 import { AuthService } from "./auth/auth.service";
 import { PrismaService } from "./prisma.service";
+import { PdfService } from "./inscricao/pdf.service";
+import { EmailService } from "./inscricao/email.service";
 
 @Module({
   imports: [
@@ -22,8 +25,9 @@ import { PrismaService } from "./prisma.service";
     DocumentosController,
     AssinaturaController,
     AuthController,
+    InscricaoController,
   ],
-  providers: [AuthService, PrismaService],
+  providers: [AuthService, PrismaService, PdfService, EmailService],
   exports: [PrismaService],
 })
 export class AppModule {}

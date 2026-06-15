@@ -3,3 +3,10 @@ node_modules
 .env
 
 /src/generated/prisma
+
+# PDFs gerados
+uploads/
+
+# Scripts de teste local
+test-inscricao.ts
+test-output/

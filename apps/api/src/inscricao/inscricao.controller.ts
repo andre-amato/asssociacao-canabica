@@ -3,6 +3,7 @@ import {
   Post,
   Body,
   InternalServerErrorException,
+  BadRequestException,
   Get,
   Param,
   Res,
@@ -12,6 +13,8 @@ import { IsNotEmpty, IsEmail, IsOptional } from "class-validator";
 import { Response } from "express";
 import * as fs from "fs";
 import * as path from "path";
+import * as dns from "dns";
+import { promisify } from "util";
 import { PdfService, DadosInscricao } from "./pdf.service";
 import { EmailService } from "./email.service";
 
@@ -126,6 +129,21 @@ export class InscricaoController {
 
   @Post()
   async criarInscricao(@Body() dto: InscricaoDto) {
+    // Validar se o domínio do email existe (MX lookup)
+    const emailDomain = dto.email.split("@")[1];
+    if (emailDomain) {
+      const resolveMx = promisify(dns.resolveMx);
+      try {
+        const mxRecords = await resolveMx(emailDomain);
+        if (!mxRecords || mxRecords.length === 0) {
+          throw new BadRequestException("O e-mail informado não parece ser válido. Verifique e tente novamente.");
+        }
+      } catch (err: any) {
+        if (err instanceof BadRequestException) throw err;
+        throw new BadRequestException("O e-mail informado não parece ser válido. Verifique o domínio e tente novamente.");
+      }
+    }
+
     try {
       const dados: DadosInscricao = { ...dto };
 

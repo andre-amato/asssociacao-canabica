@@ -214,31 +214,40 @@ export class PdfService {
     });
     y -= lineHeight * 4;
 
-    // Assinatura
+    // Assinatura (centralizada, tamanho controlado)
     if (dados.assinaturaBase64) {
       const sigData = dados.assinaturaBase64.replace(/^data:image\/png;base64,/, "");
       const sigImage = await pdfDoc.embedPng(Buffer.from(sigData, "base64"));
-      const sigDims = sigImage.scale(0.4);
+      const maxWidth = 200;
+      const maxHeight = 60;
+      const scale = Math.min(maxWidth / sigImage.width, maxHeight / sigImage.height);
+      const sigWidth = sigImage.width * scale;
+      const sigHeight = sigImage.height * scale;
+      const pageWidth = 595.28;
       page.drawImage(sigImage, {
-        x: 200,
-        y: y - sigDims.height,
-        width: sigDims.width,
-        height: sigDims.height,
+        x: (pageWidth - sigWidth) / 2,
+        y: y - sigHeight,
+        width: sigWidth,
+        height: sigHeight,
       });
-      y -= sigDims.height + 10;
+      y -= sigHeight + 10;
     }
 
     // Linha da assinatura
-    page.drawText("_____________________________________________", {
-      x: 170,
+    const lineText = "_____________________________________________";
+    const lineWidth = fontRegular.widthOfTextAtSize(lineText, 10);
+    page.drawText(lineText, {
+      x: (595.28 - lineWidth) / 2,
       y,
       size: 10,
       font: fontRegular,
     });
     y -= lineHeight;
 
-    page.drawText("Paciente ou Representante legal", {
-      x: 220,
+    const labelPaciente = "Paciente ou Representante legal";
+    const labelPacienteWidth = fontBold.widthOfTextAtSize(labelPaciente, 10);
+    page.drawText(labelPaciente, {
+      x: (595.28 - labelPacienteWidth) / 2,
       y,
       size: 10,
       font: fontBold,
@@ -434,30 +443,38 @@ export class PdfService {
     });
     y -= lineHeight * 3;
 
-    // Assinatura
+    // Assinatura (centralizada, tamanho controlado)
     if (dados.assinaturaBase64) {
       const sigData = dados.assinaturaBase64.replace(/^data:image\/png;base64,/, "");
       const sigImage = await pdfDoc.embedPng(Buffer.from(sigData, "base64"));
-      const sigDims = sigImage.scale(0.4);
+      const maxWidth = 200;
+      const maxHeight = 60;
+      const scale = Math.min(maxWidth / sigImage.width, maxHeight / sigImage.height);
+      const sigWidth = sigImage.width * scale;
+      const sigHeight = sigImage.height * scale;
       page.drawImage(sigImage, {
-        x: 200,
-        y: y - sigDims.height,
-        width: sigDims.width,
-        height: sigDims.height,
+        x: (pageWidth - sigWidth) / 2,
+        y: y - sigHeight,
+        width: sigWidth,
+        height: sigHeight,
       });
-      y -= sigDims.height + 10;
+      y -= sigHeight + 10;
     }
 
-    page.drawText("_____________________________________________", {
-      x: 170,
+    const lineText2 = "_____________________________________________";
+    const lineWidth2 = fontRegular.widthOfTextAtSize(lineText2, 10);
+    page.drawText(lineText2, {
+      x: (pageWidth - lineWidth2) / 2,
       y,
       size: 10,
       font: fontRegular,
     });
     y -= lineHeight;
 
-    page.drawText("Associado ou Representante legal", {
-      x: 215,
+    const labelAssociado = "Associado ou Representante legal";
+    const labelAssociadoWidth = fontBold.widthOfTextAtSize(labelAssociado, 10);
+    page.drawText(labelAssociado, {
+      x: (pageWidth - labelAssociadoWidth) / 2,
       y,
       size: 10,
       font: fontBold,

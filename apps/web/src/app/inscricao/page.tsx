@@ -56,6 +56,7 @@ export default function Inscricao() {
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
   const [mostrarResponsavel, setMostrarResponsavel] = useState(false);
+  const [emailConfirmacao, setEmailConfirmacao] = useState("");
 
   const [form, setForm] = useState<FormData>({
     nomeCompleto: "",
@@ -105,6 +106,11 @@ export default function Inscricao() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro("");
+
+    if (form.email !== emailConfirmacao) {
+      setErro("Os e-mails não coincidem. Por favor, verifique.");
+      return;
+    }
 
     if (sigCanvas.current?.isEmpty()) {
       setErro("Por favor, assine no campo de assinatura antes de enviar.");
@@ -429,6 +435,27 @@ export default function Inscricao() {
                       onChange={(e) => updateField("email", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-verde/20 focus:outline-none focus:border-verde bg-creme/50"
                     />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-teal mb-1">
+                      Confirme seu e-mail *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="digite o e-mail novamente"
+                      value={emailConfirmacao}
+                      onChange={(e) => setEmailConfirmacao(e.target.value)}
+                      className={`w-full px-4 py-3 rounded-xl border focus:outline-none bg-creme/50 ${
+                        emailConfirmacao && emailConfirmacao !== form.email
+                          ? "border-red-400 focus:border-red-500"
+                          : "border-verde/20 focus:border-verde"
+                      }`}
+                    />
+                    {emailConfirmacao && emailConfirmacao !== form.email && (
+                      <p className="text-red-500 text-xs mt-1">Os e-mails não coincidem.</p>
+                    )}
                   </div>
 
                   <div>

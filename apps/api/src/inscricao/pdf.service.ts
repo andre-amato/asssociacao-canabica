@@ -417,21 +417,21 @@ export class PdfService {
       y = height - 50;
     }
 
-    // Data
+    // Data (centralizada)
     const agora = new Date();
     const meses = [
       "janeiro", "fevereiro", "março", "abril", "maio", "junho",
       "julho", "agosto", "setembro", "outubro", "novembro", "dezembro",
     ];
-    page.drawText(
-      `${dados.cidade}, ${agora.getDate()} de ${meses[agora.getMonth()]} de ${agora.getFullYear()}.`,
-      {
-        x: 180,
-        y,
-        size: 10,
-        font: fontRegular,
-      },
-    );
+    const dataTexto = `${dados.cidade}, ${agora.getDate()} de ${meses[agora.getMonth()]} de ${agora.getFullYear()}.`;
+    const dataWidth = fontRegular.widthOfTextAtSize(dataTexto, 10);
+    const pageWidth = 595.28;
+    page.drawText(dataTexto, {
+      x: (pageWidth - dataWidth) / 2,
+      y,
+      size: 10,
+      font: fontRegular,
+    });
     y -= lineHeight * 3;
 
     // Assinatura

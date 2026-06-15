@@ -14,6 +14,9 @@ export class EmailService {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      connectionTimeout: 10000, // 10s para conectar
+      greetingTimeout: 10000,   // 10s para greeting
+      socketTimeout: 15000,     // 15s para socket
     });
   }
 

@@ -149,18 +149,15 @@ export class InscricaoController {
       fs.writeFileSync(autorizacaoPath, autorizacaoPdf);
       fs.writeFileSync(fichaPath, fichaPdf);
 
-      // Enviar e-mails
-      try {
-        await this.emailService.enviarDocumentosAssinados({
-          emailAssociado: dto.email,
-          nomeAssociado: dto.nomeCompleto,
-          autorizacaoPdf,
-          fichaPdf,
-        });
-      } catch (emailError) {
-        console.error("Erro ao enviar e-mail:", emailError);
-        // Não falhar a requisição se o e-mail falhar — os PDFs já foram salvos
-      }
+      // Enviar e-mails (fire-and-forget — não bloqueia a resposta)
+      this.emailService.enviarDocumentosAssinados({
+        emailAssociado: dto.email,
+        nomeAssociado: dto.nomeCompleto,
+        autorizacaoPdf,
+        fichaPdf,
+      }).catch((emailError) => {
+        console.error("Erro ao enviar e-mail:", emailError.message || emailError);
+      });
 
       return {
         message: "Inscrição realizada com sucesso! Os documentos foram gerados e enviados por e-mail.",
